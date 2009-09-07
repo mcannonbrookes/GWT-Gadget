@@ -1,0 +1,16 @@
+.gadget {
+    width: 200px;
+    border: 1px solid gray;
+    padding: 8px;
+    margin: 8px 0;
+
+}
+
+.buttonPanel {
+    float: right;
+    padding-top: 8px;
+}
+
+.clearFloats {
+    clear: both;
+}

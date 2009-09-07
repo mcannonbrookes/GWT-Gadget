@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project name="web" xmlns:artifact="urn:maven-artifact-ant">
+
+    <target name="CompileGWTSources">
+        <antcall target="Build" inheritRefs="true"/>
+    </target>
+
+    <target name="Build">
+        <parallel threadsPerProcessor="1">
+            <antcall target="CompileGWTModule" inheritRefs="true">
+                <param name="gwt.module" value="com.atlassian.mike.plugins.HelloWorld"/>
+            </antcall>
+        </parallel>
+    </target>
+
+    <!-- compile a single GWT module. Pass in a param called gwt.module to identify the module. -->
+    <target name="CompileGWTModule">
+        <java fork="true" failonerror="true" classname="com.google.gwt.dev.Compiler">
+            <jvmarg value="-Xmx512m"/>
+            <jvmarg value="-Xss4096k"/>
+            <!-- These exclusions are needed to get compiler to work on OS X -->
+            <!-- http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/8f47c4112e6d3220/338307af83555557 -->
+            <jvmarg value="-XX:CompileCommand=exclude,org/eclipse/core/internal/dtree/DataTreeNode,forwardDeltaWith"/>
+            <jvmarg value="-XX:CompileCommand=exclude,org/eclipse/jdt/internal/compiler/lookup/ParameterizedTypeBinding,&lt;init&gt;"/>
+            <jvmarg value="-XX:CompileCommand=exclude,org/eclipse/jdt/internal/compiler/lookup/ParameterizedMethodBinding,&lt;init&gt;"/>
+            <!--Possible values are OBF, PRETTY or DETAILED. -->
+            <arg value="-style"/>
+            <arg value="PRETTY"/>
+            <arg value="-war"/>
+            <arg value="target/gwt"/>
+            <arg value="-gen"/>
+            <arg value="target"/>
+            <arg value="-localWorkers"/>
+            <arg value="5"/>
+            <!--<arg value="-workDir"/>-->
+            <!--<arg value="${java.io.tmpdir}/${gwt.module}"/>-->
+            <arg value="${gwt.module}"/>
+            <classpath>
+                <pathelement location="src/main/java"/>
+                <pathelement location="src/main/webapp"/>
+                <!-- To be able to locate images for ImageBundles -->
+                <pathelement path="${gwt.classpath}"/>
+            </classpath>
+        </java>
+
+        <replaceregexp match="\'([0-9A-F]{32}\.cache\.js)"
+                       replace="\'../../../../../../download/resources/com.atlassian.mike.plugins.gwtgadget/gwt/\1"
+                       flags="g" byline="true">
+            <fileset dir="target/gwt" includes="**/*.xml"/>
+        </replaceregexp>
+
+        <!-- copy target/gwt to the target/classes/gwt dir -->
+        <copy todir="target/classes/gwt">
+            <fileset dir="target/gwt/com.atlassian.mike.plugins.HelloWorld" />
+        </copy>
+    </target>
+</project>

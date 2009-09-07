@@ -1,0 +1,9 @@
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <!-- Support for creating Gadgets. -->
+    <inherits name="com.google.gwt.gadgets.Gadgets" />
+    <!-- Styles used by the gadget -->
+    <stylesheet src="styles.css"/>
+    <!-- Main class -->
+    <entry-point class="com.atlassian.mike.plugins.client.HelloWorld"/>
+</module>

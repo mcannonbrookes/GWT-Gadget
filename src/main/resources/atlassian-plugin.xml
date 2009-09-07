@@ -1,0 +1,11 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.artifactId}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    </plugin-info>
+
+    <gadget key="gwt-gadget" name="GWT Gadget" location="gwt/com.atlassian.mike.plugins.client.HelloWorld.gadget.xml"/>
+
+    <resource type="download" name="gwt/" location="gwt/" />
+</atlassian-plugin>
